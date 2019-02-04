@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Sollicitatieformulier</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Material Design theme -->
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
 </head>
 <body>
@@ -49,96 +50,14 @@
       <div class="alert alert-success" id="success" role="alert">
             We hebben je gegevens ontvangen en nemen contact met je op! 👍🏼
     </div>
-      <!-- Polyfills -->
+      <!-- Polyfills for promise, fetch and formdata -->
     <script src="https://cdn.jsdelivr.net/npm/promise-polyfill@7/dist/polyfill.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/formdata-polyfill@3.0.13/formdata.min.js"></script>
 
-      <script>
-        const rewq = atob('aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J5WGJhYXF0SFZyV05PNjZHS0haSTByWU1RcjhYdHdhTUxYdzJrZ0dXazFKVGVvdVNpOC9leGVj');
-        const form = document.forms['submit-to-google-sheet']
-        const successText = document.getElementById('success');
-        successText.hidden = true;
-      
-        form.addEventListener('submit', e => {
-          e.preventDefault()
-          fetch(rewq, { method: 'POST', body: new FormData(form)})
-            .then(response => console.log('Success!', response))
-            .catch(error => console.error('Error!', error.message))
-        successText.hidden = false;
-        })
-      </script>
+      <script src="js/dataToGoogleSheets.js"></script>
+      <!-- Dropbox SDK -->
       <script src="https://unpkg.com/dropbox/dist/Dropbox-sdk.min.js"></script>
-      <script>
-        function uploadFile() {
-            
-          const UPLOAD_FILE_SIZE_LIMIT = 150 * 1024 * 1024;
-          var ACCESS_TOKEN = 'lL6F2qd7LKAAAAAAAAAADWtL-vhx0AXpck4buwtSrxCMwyu4ywr9Tgaayxs_3929'; // document.getElementById('access-token').value;
-          var dbx = new Dropbox.Dropbox({ accessToken: ACCESS_TOKEN });
-          var fileInput = document.getElementById('file-upload');
-          var file = fileInput.files[0];
-          
-          if (file.size < UPLOAD_FILE_SIZE_LIMIT) { // File is smaller than 150 Mb - use filesUpload API
-            dbx.filesUpload({path: '/' + file.name, contents: file})
-              .then(function(response) {
-                var results = document.getElementById('fileUploadResults');
-                results.appendChild(document.createTextNode('CV is verstuurd'));
-                console.log(response);
-              })
-              .catch(function(error) {
-                console.error(error);
-              });
-          } else { // File is bigger than 150 Mb - use filesUploadSession* API
-            const maxBlob = 8 * 1000 * 1000; // 8Mb - Dropbox JavaScript API suggested max file / chunk size
-    
-            var workItems = [];     
-          
-            var offset = 0;
-    
-            while (offset < file.size) {
-              var chunkSize = Math.min(maxBlob, file.size - offset);
-              workItems.push(file.slice(offset, offset + chunkSize));
-              offset += chunkSize;
-            } 
-              
-            const task = workItems.reduce((acc, blob, idx, items) => {
-              if (idx == 0) {
-                // Starting multipart upload of file
-                return acc.then(function() {
-                  return dbx.filesUploadSessionStart({ close: false, contents: blob})
-                            .then(response => response.session_id)
-                });          
-              } else if (idx < items.length-1) {  
-                // Append part to the upload session
-                return acc.then(function(sessionId) {
-                 var cursor = { session_id: sessionId, offset: idx * maxBlob };
-                 return dbx.filesUploadSessionAppendV2({ cursor: cursor, close: false, contents: blob }).then(() => sessionId); 
-                });
-              } else {
-                // Last chunk of data, close session
-                return acc.then(function(sessionId) {
-                  var cursor = { session_id: sessionId, offset: file.size - blob.size };
-                  var commit = { path: '/' + file.name, mode: 'add', autorename: true, mute: false };              
-                  return dbx.filesUploadSessionFinish({ cursor: cursor, commit: commit, contents: blob });           
-                });
-              }          
-            }, Promise.resolve());
-            
-            task.then(function(result) {
-              var results = document.getElementById('fileUploadResults');
-              results.appendChild(document.createTextNode('CV is verstuurd'));
-            }).catch(function(error) {
-              console.error(error);
-            });
-            
-          }
-          return false;
-        }
-      </script>
-      <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
-      
-      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-      <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
-      <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
-      <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
+      <script src="js/dataToDropbox.js"></script>
 </body>
 </html>
