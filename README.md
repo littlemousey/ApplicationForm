@@ -7,6 +7,7 @@ To prepare the Google Sheet follow the first 5 steps of https://github.com/jamie
 In my example, the Google sheet contains 8 columns:
 
 | timestamp | firstName | lastName  | telephone | email  | linkedIn | githubId  | message |
+| ------------- | ------------- |------------- | ------------- |------------- | ------------- |------------- | ------------- |
 | 1/31/2019 | John | Doe | +31612345354 | john@doe.com | johndoe | john_doe | Hi, I'm John |
 
 You can place your API for Google Sheets (the 'Current web app URL') in `config/apis.js` as `googleSheetsAPI`.
