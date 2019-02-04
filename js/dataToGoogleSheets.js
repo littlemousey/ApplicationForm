@@ -1,4 +1,4 @@
-const rewq = atob('aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J5WGJhYXF0SFZyV05PNjZHS0haSTByWU1RcjhYdHdhTUxYdzJrZ0dXazFKVGVvdVNpOC9leGVj');
+const rewq = googleSheetsAPI;
 const form = document.forms['submit-to-google-sheet']
 const successText = document.getElementById('success');
 successText.hidden = true;

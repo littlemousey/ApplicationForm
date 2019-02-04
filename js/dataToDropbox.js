@@ -1,8 +1,8 @@
 function uploadFile() {
             
     const UPLOAD_FILE_SIZE_LIMIT = 150 * 1024 * 1024;
-    var ACCESS_TOKEN = 'lL6F2qd7LKAAAAAAAAAADWtL-vhx0AXpck4buwtSrxCMwyu4ywr9Tgaayxs_3929';
-    var dbx = new Dropbox.Dropbox({ accessToken: ACCESS_TOKEN });
+    var ACCESS_TOKEN = dropboxAPI;
+    var dbx = new Dropbox.Dropbox({ accessToken: ACCESS_TOKEN, fetch: fetch });
     var fileInput = document.getElementById('file-upload');
     var file = fileInput.files[0];
     

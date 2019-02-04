@@ -37,7 +37,7 @@
         </div>
         <div class="form-group">
           <label for="file-upload" class="bmd-label-floating">CV</label>
-          <input type="file" id="file-upload" accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.pdf" class="form-control" />
+          <input type="file" id="file-upload" accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.pdf" class="form-control" required/>
           <h3 id="fileUploadResults"></h3>
         </div>
         <div class="form-group">
@@ -52,9 +52,10 @@
     </div>
       <!-- Polyfills for promise, fetch and formdata -->
     <script src="https://cdn.jsdelivr.net/npm/promise-polyfill@7/dist/polyfill.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/formdata-polyfill@3.0.13/formdata.min.js"></script>
-
+        
+    <script src="config/apis.js"></script>
       <script src="js/dataToGoogleSheets.js"></script>
       <!-- Dropbox SDK -->
       <script src="https://unpkg.com/dropbox/dist/Dropbox-sdk.min.js"></script>
